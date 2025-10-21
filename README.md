@@ -27,7 +27,16 @@ Este repositório contém o arquivo `geoestrategico.kml`, que representa o produ
    - Eventos e Operações
 4. Explore cada camada confirmando se os ícones, estilos e descrições aparecem conforme o esperado.
 
-## 3. Conferência geoespacial básica com GDAL/OGR
+## 3. Verificação estrutural com o validador interno
+
+1. Garanta que o Python 3 esteja disponível.
+2. Execute o script auxiliar:
+   ```bash
+   python validate_kml.py geoestrategico.kml
+   ```
+3. Analise o resumo exibido — o script confirma a presença das pastas obrigatórias e informa a quantidade de placemarks em cada uma.
+
+## 4. Conferência geoespacial básica com GDAL/OGR
 
 1. Instale o GDAL (se não possuir):
    ```bash
@@ -43,7 +52,7 @@ Este repositório contém o arquivo `geoestrategico.kml`, que representa o produ
    ```
    Em seguida, analise o arquivo `geoestrategico.json` em ferramentas SIG ou scripts personalizados.
 
-## 4. Checklist operacional
+## 5. Checklist operacional
 
 - [ ] Todos os elementos possuem nome e descrição coerentes.
 - [ ] As coordenadas correspondem às localizações reais indicadas.
