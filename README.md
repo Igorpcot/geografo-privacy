@@ -1,62 +1,65 @@
-# Guia de Testes do Geógrafo
+# Guia Operacional do Geógrafo v2
 
-Este repositório contém o arquivo `geoestrategico.kml`, que representa o produto final geoespacial gerado pelo agente Geógrafo v2. As orientações abaixo mostram como validar o conteúdo e garantir que o arquivo KML esteja pronto para uso operacional.
+Este repositório abriga o agente CLI utilizado para transformar relatórios geoestratégicos em um arquivo KML estruturado. A árvore gerada segue o padrão temático exigido (fronteiras, cidades, regiões estratégicas, infraestrutura, rotas e operações) e pode ser validada com as ferramentas incluídas.
 
-## 1. Validação sintática do KML
+## 1. Preparação do ambiente
 
-1. Instale o pacote `libxml2-utils` se ainda não estiver disponível:
+1. Garanta que o Python 3.9+ esteja instalado.
+2. (Opcional, para leitura direta de PDFs) instale a dependência adicional:
+   ```bash
+   pip install pdfminer.six
+   ```
+3. Clone ou atualize este repositório e navegue até a pasta raiz.
+
+## 2. Gerar um KML a partir de um relatório
+
+Exemplo mínimo utilizando o relatório de demonstração em `samples/exemplo_relatorio.txt`:
+
+```bash
+python geografo_agent.py samples/exemplo_relatorio.txt saida.kml
+```
+
+A execução exibe a lista de entidades reconhecidas e gera `saida.kml` com a hierarquia completa do Geógrafo v2. Utilize `--include-all` para exportar o catálogo completo independentemente do texto analisado.
+
+### Entrada em PDF
+
+Se o utilitário `pdfminer.six` estiver instalado, o agente lê PDFs diretamente:
+
+```bash
+python geografo_agent.py relatorio.pdf saida.kml
+```
+
+Na ausência da dependência, converta o PDF para texto antes de executar o agente.
+
+## 3. Validação estrutural do KML
+
+Use o validador interno para confirmar a presença das pastas obrigatórias e contabilizar os placemarks:
+
+```bash
+python validate_kml.py saida.kml
+```
+
+O script falha com código de saída diferente de zero se o arquivo estiver corrompido ou se alguma pasta obrigatória estiver ausente.
+
+## 4. Validações externas recomendadas
+
+1. **Validação sintática com `xmllint`:**
    ```bash
    sudo apt-get update && sudo apt-get install -y libxml2-utils
+   xmllint --noout saida.kml
    ```
-2. Execute a validação do XML:
-   ```bash
-   xmllint --noout geoestrategico.kml
-   ```
-   - **Resultado esperado:** sem mensagens de erro. Qualquer erro sintático será reportado diretamente pelo `xmllint` com o número da linha problemática.
-
-## 2. Visualização no Google Earth Pro
-
-1. Abra o Google Earth Pro (Windows, macOS ou Linux).
-2. Acesse **Arquivo > Abrir** e selecione `geoestrategico.kml`.
-3. Verifique a estrutura de pastas na barra lateral:
-   - Países e Fronteiras
-   - Capitais e Cidades
-   - Regiões e Zonas Estratégicas
-   - Infraestrutura e Recursos
-   - Linhas e Rotas Estratégicas
-   - Eventos e Operações
-4. Explore cada camada confirmando se os ícones, estilos e descrições aparecem conforme o esperado.
-
-## 3. Verificação estrutural com o validador interno
-
-1. Garanta que o Python 3 esteja disponível.
-2. Execute o script auxiliar:
-   ```bash
-   python validate_kml.py geoestrategico.kml
-   ```
-3. Analise o resumo exibido — o script confirma a presença das pastas obrigatórias e informa a quantidade de placemarks em cada uma.
-
-## 4. Conferência geoespacial básica com GDAL/OGR
-
-1. Instale o GDAL (se não possuir):
+2. **Inspeção com GDAL/OGR:**
    ```bash
    sudo apt-get update && sudo apt-get install -y gdal-bin
+   ogrinfo saida.kml
+   ogr2ogr -f GeoJSON saida.json saida.kml
    ```
-2. Liste as camadas com `ogrinfo`:
-   ```bash
-   ogrinfo geoestrategico.kml
-   ```
-3. Opcionalmente, converta para GeoJSON para inspeção adicional:
-   ```bash
-   ogr2ogr -f GeoJSON geoestrategico.json geoestrategico.kml
-   ```
-   Em seguida, analise o arquivo `geoestrategico.json` em ferramentas SIG ou scripts personalizados.
 
 ## 5. Checklist operacional
 
 - [ ] Todos os elementos possuem nome e descrição coerentes.
 - [ ] As coordenadas correspondem às localizações reais indicadas.
-- [ ] Os estilos (ícones, cores, espessuras) estão alinhados ao padrão cartográfico/militar desejado.
-- [ ] As pastas seguem a hierarquia definida nas diretrizes.
+- [ ] Os estilos (ícones, cores, espessuras) seguem o padrão cartográfico/militar.
+- [ ] As pastas estão organizadas conforme as diretrizes do Geógrafo v2.
 
-Seguindo estes passos, é possível testar e validar o arquivo KML de forma confiável antes de incorporá-lo a fluxos de trabalho analíticos ou operacionais.
+Seguindo estes passos o agente fica pronto para gerar, validar e entregar produtos KML compatíveis com fluxos de análise geoespacial.
