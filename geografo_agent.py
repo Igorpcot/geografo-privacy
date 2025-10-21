@@ -9,6 +9,7 @@ from __future__ import annotations
 
 import argparse
 import json
+import re
 import sys
 from pathlib import Path
 from typing import Any, Dict, Iterable, List
@@ -70,6 +71,36 @@ def parse_args(argv: Iterable[str]) -> argparse.Namespace:
     return parser.parse_args(list(argv))
 
 
+def _rtf_to_text(raw: str) -> str:
+    """Converte um conteúdo RTF simples em texto plano."""
+
+    def unicode_replacer(match: re.Match[str]) -> str:
+        value = int(match.group(1))
+        if value < 0:
+            value += 0x10000
+        return chr(value)
+
+    text = raw.replace("\r", "")
+    text = re.sub(r"\\u(-?\d+)[^\\]?", unicode_replacer, text)
+    text = re.sub(
+        r"\\'[0-9a-fA-F]{2}",
+        lambda m: bytes.fromhex(m.group(0)[2:]).decode("latin1"),
+        text,
+    )
+    replacements = {
+        "\\par": "\n",
+        "\\line": "\n",
+        "\\tab": "\t",
+    }
+    for key, value in replacements.items():
+        text = text.replace(key, value)
+
+    text = re.sub(r"\\[a-zA-Z]+-?\d* ?", "", text)
+    text = text.replace("{", "").replace("}", "")
+    text = re.sub(r"\n{2,}", "\n", text)
+    return text.strip()
+
+
 def read_source(path: Path) -> str:
     suffix = path.suffix.lower()
     if suffix == ".pdf":
@@ -78,6 +109,8 @@ def read_source(path: Path) -> str:
                 "Suporte a PDF indisponível. Instale 'pdfminer.six' ou converta o arquivo para texto."
             )
         return extract_text(str(path))
+    if suffix == ".rtf":
+        return _rtf_to_text(path.read_text(encoding="latin-1"))
     return path.read_text(encoding="utf-8")
 
 

@@ -23,10 +23,12 @@ A execução exibe a lista de entidades reconhecidas e gera `saida.kml` com a hi
 
 ### Entrada em PDF
 
-Se o utilitário `pdfminer.six` estiver instalado, o agente lê PDFs diretamente:
+Se o utilitário `pdfminer.six` estiver instalado, o agente lê PDFs diretamente. Arquivos RTF
+são suportados nativamente:
 
 ```bash
 python geografo_agent.py relatorio.pdf saida.kml
+python geografo_agent.py relatorio.rtf saida.kml
 ```
 
 Na ausência da dependência, converta o PDF para texto antes de executar o agente.
