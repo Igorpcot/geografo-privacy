@@ -5,122 +5,211 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Política de Privacidade — Geógrafo</title>
   <style>
+    :root {
+      color-scheme: light dark;
+    }
+    * {
+      box-sizing: border-box;
+    }
     body {
-      font-family: "Segoe UI", Roboto, sans-serif;
-      background-color: #fafafa;
-      color: #333;
-      line-height: 1.6;
       margin: 0;
-      padding: 0;
+      font-family: "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+      line-height: 1.6;
+      background: #f5f7fa;
+      color: #1f2933;
     }
     header {
-      background-color: #0c4a6e;
-      color: white;
+      background: linear-gradient(135deg, #0c4a6e, #103d60);
+      color: #fff;
+      padding: 2.5rem 1rem;
       text-align: center;
-      padding: 2rem 1rem;
+    }
+    header h1 {
+      margin: 0 0 0.5rem;
+      font-size: 2rem;
+      letter-spacing: 0.04em;
+    }
+    header p {
+      margin: 0;
+      font-size: 1rem;
+      opacity: 0.85;
     }
     main {
-      max-width: 880px;
-      margin: 2rem auto;
-      padding: 2rem;
-      background: white;
-      border-radius: 12px;
-      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+      max-width: 960px;
+      margin: -3rem auto 3rem;
+      padding: 2.5rem;
+      background: #ffffff;
+      border-radius: 16px;
+      box-shadow: 0 20px 60px rgba(15, 23, 42, 0.15);
+      position: relative;
     }
-    h1, h2 {
+    h2 {
       color: #0c4a6e;
+      margin-top: 2rem;
     }
-    h1 {
-      text-align: center;
-      margin-bottom: 1.5rem;
+    h3 {
+      color: #134e6f;
+      margin-top: 1.5rem;
+    }
+    p {
+      margin: 0.75rem 0;
+    }
+    ul {
+      margin: 0.75rem 0 1.5rem 1.5rem;
+      padding: 0;
+    }
+    li {
+      margin-bottom: 0.5rem;
     }
     a {
       color: #0c4a6e;
       text-decoration: none;
+      border-bottom: 1px solid rgba(12, 74, 110, 0.35);
+      transition: border-color 0.2s ease;
     }
-    a:hover {
-      text-decoration: underline;
+    a:hover,
+    a:focus {
+      border-bottom-color: rgba(12, 74, 110, 0.9);
+    }
+    .meta {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 1rem;
+      background: #0f172a;
+      color: #e2e8f0;
+      border-radius: 12px;
+      padding: 1.5rem;
+      margin: 2rem 0;
+    }
+    .meta div {
+      font-size: 0.95rem;
+    }
+    .meta strong {
+      display: block;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      font-size: 0.75rem;
+      margin-bottom: 0.35rem;
+      opacity: 0.8;
     }
     footer {
       text-align: center;
-      margin-top: 3rem;
+      padding: 2rem 1rem 3rem;
       font-size: 0.9rem;
-      color: #555;
+      color: #475569;
+    }
+    @media (max-width: 640px) {
+      main {
+        margin: -2rem 1rem 2rem;
+        padding: 1.75rem;
+      }
+      header {
+        padding: 2rem 1rem;
+      }
     }
   </style>
 </head>
 <body>
   <header>
-    <h1>Política de Privacidade — Geógrafo</h1>
+    <h1>Política de Privacidade</h1>
+    <p>Geógrafo v2 — Assistente de análise geoespacial profissional</p>
   </header>
 
   <main>
-    <p><strong>Vigência:</strong> 7 de outubro de 2025</p>
-    <p><strong>Responsável:</strong> Master Kmz</p>
-    <p><strong>Contato:</strong> <a href="mailto:igorpcot@gmail.com">igorpcot@gmail.com</a></p>
+    <section class="meta">
+      <div>
+        <strong>Vigência</strong>
+        <span>10 de outubro de 2025</span>
+      </div>
+      <div>
+        <strong>Controlador</strong>
+        <span>Master Kmz</span>
+      </div>
+      <div>
+        <strong>Contato</strong>
+        <a href="mailto:privacidade@masterkmz.com">privacidade@masterkmz.com</a>
+      </div>
+    </section>
 
-    <h2>1. Visão Geral</h2>
+    <h2>1. Escopo e Finalidade</h2>
     <p>
-      O Geógrafo é um assistente de análise geoespacial desenvolvido por Master Kmz para
-      interpretar documentos, extrair referências geográficas e gerar produtos cartográficos
-      como tabelas, arquivos KML e mapas. Esta política descreve como os dados são tratados
-      quando o agente é utilizado por meio da plataforma da OpenAI.
+      Esta política descreve como o Geógrafo v2 trata dados pessoais e operacionais durante o
+      processamento de relatórios geoestratégicos por meio da plataforma da OpenAI. O agente coleta,
+      estrutura e devolve informações geográficas em formato KML e relatórios correlatos, sempre com foco na
+      precisão cartográfica e na confidencialidade operacional.
     </p>
 
-    <h2>2. Coleta de Dados</h2>
-    <p>Durante o uso do Geógrafo podem ser coletados:</p>
+    <h2>2. Categorias de Dados Tratados</h2>
+    <h3>2.1 Dados fornecidos pelo usuário</h3>
     <ul>
-      <li><strong>Entradas do usuário:</strong> textos e arquivos enviados durante as interações.</li>
-      <li><strong>Dados geográficos:</strong> nomes de locais, coordenadas e atributos espaciais derivados das suas entradas.</li>
-      <li><strong>Dados de APIs:</strong> informações consultadas em serviços de terceiros, como APIs meteorológicas.</li>
-      <li><strong>Metadados de uso:</strong> dados não identificáveis tratados automaticamente pela OpenAI (timestamps, IDs de sessão etc.).</li>
+      <li>Textos, relatórios e anexos enviados para análise.</li>
+      <li>Marcadores geográficos, coordenadas ou observações inseridos manualmente.</li>
+      <li>Dados de contato utilizados para suporte ou devolutivas.</li>
     </ul>
 
-    <h2>3. Uso dos Dados</h2>
-    <p>Os dados são utilizados para:</p>
+    <h3>2.2 Dados derivados</h3>
     <ul>
-      <li>Gerar análises geográficas e produtos KML solicitados.</li>
-      <li>Buscar informações complementares em APIs confiáveis.</li>
-      <li>Melhorar a experiência do usuário e a precisão do modelo.</li>
+      <li>Entidades geográficas identificadas automaticamente (cidades, bases, rotas, zonas).</li>
+      <li>Coordenadas interpoladas a partir de bases cartográficas públicas.</li>
+      <li>Metadados técnicos dos produtos gerados (versões, horário de processamento, parâmetros).</li>
     </ul>
-    <p>Master Kmz não vende nem compartilha dados com terceiros para fins de publicidade.</p>
 
-    <h2>4. Armazenamento e Retenção</h2>
+    <h3>2.3 Dados de terceiros</h3>
+    <ul>
+      <li>Informações de APIs externas consultadas sob demanda, como dados meteorológicos ou de infraestrutura.</li>
+      <li>Registros necessários para auditoria ou requisitos legais aplicáveis.</li>
+    </ul>
+
+    <h2>3. Bases Legais e Uso</h2>
     <p>
-      Entradas de usuários e saídas geradas podem ser armazenadas temporariamente para processamento
-      e melhoria do serviço. Os dados são mantidos apenas pelo tempo necessário ou conforme exigido
-      pela plataforma da OpenAI. Você pode solicitar a exclusão antecipada entrando em contato pelo e-mail indicado.
+      O tratamento de dados é fundamentado em legítimo interesse e execução de contrato, limitado às finalidades de:
+    </p>
+    <ul>
+      <li>Gerar produtos geoespaciais solicitados pelo usuário (KML, tabelas e relatórios).</li>
+      <li>Prestar suporte técnico e operacional.</li>
+      <li>Monitorar performance, corrigir falhas e aprimorar o agente.</li>
+    </ul>
+    <p>
+      Master Kmz não comercializa dados pessoais e restringe o compartilhamento ao estritamente necessário para a prestação do serviço.
     </p>
 
-    <h2>5. Compartilhamento de Dados</h2>
+    <h2>4. Compartilhamento</h2>
     <ul>
-      <li><strong>OpenAI:</strong> todas as interações são processadas pela API da OpenAI e estão sujeitas à <a href="https://openai.com/privacy" target="_blank" rel="noopener">política de privacidade da OpenAI</a>.</li>
-      <li><strong>APIs externas:</strong> quando necessário, o Geógrafo consulta APIs de terceiros estritamente para fornecer as informações solicitadas, compartilhando apenas os dados mínimos necessários.</li>
+      <li><strong>OpenAI:</strong> todas as interações são processadas pela API da OpenAI e sujeitas à <a href="https://openai.com/privacy" rel="noopener" target="_blank">política de privacidade da OpenAI</a>.</li>
+      <li><strong>Provedores externos:</strong> quando serviços auxiliares forem indispensáveis, apenas os dados mínimos exigidos serão transmitidos.</li>
+      <li><strong>Autoridades:</strong> informações poderão ser compartilhadas mediante obrigação legal ou ordem judicial.</li>
     </ul>
+
+    <h2>5. Retenção e Armazenamento</h2>
+    <p>
+      As entradas do usuário e as respostas geradas permanecem armazenadas pelo tempo necessário à finalidade declarada ou conforme exigência contratual com a plataforma. Sempre que possível, os dados são pseudonimizados e excluídos após o término das análises.
+    </p>
 
     <h2>6. Segurança</h2>
     <p>
-      Medidas técnicas e organizacionais razoáveis são adotadas para evitar acesso, alteração ou divulgação não autorizados.
-      Ainda assim, recomenda-se não enviar dados pessoais sensíveis por meio do agente.
+      Adotamos práticas administrativas, técnicas e físicas para mitigar riscos de acesso não autorizado, incluindo segregação de ambientes, controles de acesso e registros de auditoria. Recomenda-se evitar o envio de dados pessoais sensíveis, salvo se estritamente indispensável.
     </p>
 
-    <h2>7. Direitos dos Usuários</h2>
-    <ul>
-      <li>Solicitar acesso, correção ou exclusão dos seus dados.</li>
-      <li>Revogar o consentimento para o tratamento de dados.</li>
-      <li>Entrar em contato com o responsável para assuntos relacionados à privacidade.</li>
-    </ul>
-
-    <h2>8. Atualizações desta Política</h2>
+    <h2>7. Direitos do Titular</h2>
     <p>
-      Esta política pode ser atualizada periodicamente. Alterações relevantes serão comunicadas nesta mesma página com uma nova data de vigência.
+      Os titulares podem exercer seus direitos previstos na LGPD, tais como confirmação de tratamento, acesso, correção, anonimização, portabilidade, eliminação e revogação de consentimento. As solicitações devem ser encaminhadas ao contato oficial informado nesta política.
     </p>
 
-    <p><strong>Ao utilizar o Geógrafo, você concorda com esta Política de Privacidade.</strong></p>
+    <h2>8. Transferências Internacionais</h2>
+    <p>
+      O uso da infraestrutura da OpenAI pode envolver processamento em data centers localizados fora do Brasil. Nesses casos, asseguramos garantias adequadas de proteção de dados conforme a legislação vigente.
+    </p>
+
+    <h2>9. Atualizações</h2>
+    <p>
+      Esta política pode ser revisada a qualquer momento para refletir alterações regulatórias ou melhorias de serviço. A data de vigência será atualizada e as versões anteriores podem ser solicitadas pelo canal de contato.
+    </p>
+
+    <p><strong>Ao continuar utilizando o Geógrafo v2, você concorda com os termos aqui descritos.</strong></p>
   </main>
 
   <footer>
-    &copy; 2025 Master Kmz — Todos os direitos reservados.
+    &copy; 2025 Master Kmz. Todos os direitos reservados.
   </footer>
 </body>
 </html>
