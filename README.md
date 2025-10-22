@@ -56,6 +56,23 @@ python geografo_agent.py samples/exemplo_relatorio.txt saida.kml \
 
 O diagnóstico apresenta a cobertura por pasta temática, volume de entidades detectadas, tamanho do relatório processado e duplicidades. Os logs registram cada etapa do pipeline (ingestão, carga do catálogo, detecção, escrita do KML) seguindo o nível definido.
 
+### Exportar metadados para integração
+
+Quando precisar integrar o Geógrafo v2 a outros sistemas, gere um relatório JSON com a versão do agente, caminhos utilizados e diagnóstico completo:
+
+```bash
+python geografo_agent.py samples/exemplo_relatorio.txt saida.kml \
+  --diagnostics --export-metadata reports/ultima_execucao.json
+```
+
+O arquivo gerado inclui timestamp em UTC, versão do agente, localização do catálogo empregado, lista de entidades inseridas e o mesmo sumário de cobertura mostrado no modo diagnóstico.
+
+Para apenas consultar a versão da CLI sem executar o pipeline, utilize:
+
+```bash
+python geografo_agent.py --version
+```
+
 ## 5. Validações externas recomendadas
 
 1. **Validação sintática com `xmllint`:**

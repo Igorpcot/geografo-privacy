@@ -12,6 +12,7 @@ import json
 import logging
 import re
 import sys
+from datetime import datetime, timezone
 from pathlib import Path
 from typing import Any, Dict, Iterable, List
 
@@ -24,6 +25,7 @@ import xml.etree.ElementTree as ET
 from xml.dom import minidom
 
 KML_NAMESPACE = "http://www.opengis.net/kml/2.2"
+AGENT_VERSION = "2.1.0"
 STYLE_MAP = {
     "country-border": "Países e Fronteiras",
     "city-capital": "Capitais e Cidades",
@@ -75,6 +77,10 @@ def parse_args(argv: Iterable[str]) -> argparse.Namespace:
         help="Exibe relatório de diagnóstico ao final da execução",
     )
     parser.add_argument(
+        "--export-metadata",
+        help="Salva metadados da execução (incluindo versão) em um arquivo JSON",
+    )
+    parser.add_argument(
         "--log-file",
         help="Grava logs detalhados da execução no caminho indicado",
     )
@@ -83,6 +89,11 @@ def parse_args(argv: Iterable[str]) -> argparse.Namespace:
         default="INFO",
         choices=["DEBUG", "INFO", "WARNING", "ERROR", "CRITICAL"],
         help="Define o nível de detalhamento dos logs (padrão: INFO)",
+    )
+    parser.add_argument(
+        "--version",
+        action="version",
+        version=f"Geógrafo v2 CLI {AGENT_VERSION}",
     )
     return parser.parse_args(list(argv))
 
@@ -310,9 +321,10 @@ def run_diagnostics(
     }
 
 
-def format_diagnostics(report: Dict[str, Any]) -> List[str]:
+def format_diagnostics(report: Dict[str, Any], agent_version: str) -> List[str]:
     lines = [
         "=== Diagnóstico Operacional ===",
+        f"Versão do agente: {agent_version}",
         f"Catálogo disponível: {report['catalog_size']} entidades",
         f"Entidades reconhecidas: {report['detected_count']}",
         f"Tamanho do relatório (caracteres): {report['text_length']}",
@@ -481,7 +493,10 @@ def add_entity(document: ET.Element, entity: Dict[str, Any]) -> None:
     add_geometry(placemark, geometry)
 
 
-def build_kml(entities: List[Dict[str, Any]]) -> ET.Element:
+def build_kml(
+    entities: List[Dict[str, Any]],
+    document_metadata: Dict[str, Any] | None = None,
+) -> ET.Element:
     kml = ET.Element(tag("kml"), attrib={"xmlns": KML_NAMESPACE})
     document = ET.SubElement(kml, tag("Document"))
     name_el = ET.SubElement(document, tag("name"))
@@ -494,6 +509,13 @@ def build_kml(entities: List[Dict[str, Any]]) -> ET.Element:
     # Garante a presença das pastas na ordem correta
     for folder_name in FOLDER_ORDER:
         ensure_folder(document, folder_name)
+
+    if document_metadata:
+        extended = ET.SubElement(document, tag("ExtendedData"))
+        for key, value in document_metadata.items():
+            data_el = ET.SubElement(extended, tag("Data"), attrib={"name": key})
+            value_el = ET.SubElement(data_el, tag("value"))
+            value_el.text = str(value)
 
     for entity in entities:
         add_entity(document, entity)
@@ -548,7 +570,14 @@ def main(argv: Iterable[str]) -> int:
         print("[ALERTA] Nenhuma entidade reconhecida no relatório. Nada foi gerado.")
         return 2
 
-    kml_root = build_kml(detected)
+    document_metadata = {
+        "agent_version": AGENT_VERSION,
+        "fonte_relatorio": source_path.name,
+        "catalogo": knowledge_path.name,
+        "entidades_catalogo": len(knowledge),
+    }
+
+    kml_root = build_kml(detected, document_metadata)
     write_kml(kml_root, output_path)
     logger.info("Arquivo KML gravado em %s", output_path)
 
@@ -559,11 +588,42 @@ def main(argv: Iterable[str]) -> int:
         style = entity.get("style", "<desconhecido>")
         print(f"  - {name} ({STYLE_MAP.get(style, 'Categoria indefinida')})")
 
-    if args.diagnostics:
-        report = run_diagnostics(detected, knowledge, text)
-        logger.debug("Relatório de diagnóstico: %s", report)
-        for line in format_diagnostics(report):
+    diagnostics_report: Dict[str, Any] | None = None
+    if args.diagnostics or args.export_metadata:
+        diagnostics_report = run_diagnostics(detected, knowledge, text)
+        logger.debug("Relatório de diagnóstico: %s", diagnostics_report)
+
+    if args.diagnostics and diagnostics_report is not None:
+        for line in format_diagnostics(diagnostics_report, AGENT_VERSION):
             print(line)
+
+    if args.export_metadata:
+        metadata_path = Path(args.export_metadata)
+        metadata_path.parent.mkdir(parents=True, exist_ok=True)
+        if diagnostics_report is None:
+            diagnostics_report = run_diagnostics(detected, knowledge, text)
+        metadata_payload = {
+            "generated_at": datetime.now(tz=timezone.utc).isoformat(),
+            "agent_version": AGENT_VERSION,
+            "source": str(source_path.resolve()),
+            "output": str(output_path.resolve()),
+            "knowledge_base": str(knowledge_path.resolve()),
+            "detected_entities": [
+                {
+                    "name": entity.get("name"),
+                    "style": entity.get("style"),
+                    "folder": STYLE_MAP.get(entity.get("style")),
+                }
+                for entity in detected
+            ],
+            "diagnostics": diagnostics_report,
+        }
+        metadata_path.write_text(
+            json.dumps(metadata_payload, ensure_ascii=False, indent=2),
+            encoding="utf-8",
+        )
+        logger.info("Metadados exportados para %s", metadata_path)
+        print(f"Relatório de metadados salvo em: {metadata_path}")
 
     return 0
 

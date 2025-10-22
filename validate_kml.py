@@ -70,6 +70,26 @@ def folder_summary(document: ET.Element) -> dict[str, int]:
     return summary
 
 
+def extract_extended_data(document: ET.Element) -> dict[str, str]:
+    """Obtém metadados do elemento `<ExtendedData>` do documento."""
+
+    payload: dict[str, str] = {}
+    extended = document.find(_tag("ExtendedData"))
+    if extended is None:
+        return payload
+
+    for data_el in extended.findall(_tag("Data")):
+        name = data_el.attrib.get("name", "")
+        value_el = data_el.find(_tag("value"))
+        if not name:
+            continue
+        if value_el is None or value_el.text is None:
+            payload[name] = ""
+        else:
+            payload[name] = value_el.text.strip()
+    return payload
+
+
 def validate_required_folders(summary: dict[str, int]) -> list[str]:
     """Lista as pastas obrigatórias ausentes."""
 
@@ -90,8 +110,15 @@ def main(argv: list[str]) -> int:
         print(f"[ERRO] {exc}")
         return 1
 
+    metadata = extract_extended_data(document)
     summary = folder_summary(document)
     missing = validate_required_folders(summary)
+
+    if metadata:
+        print("Metadados do documento:")
+        for key, value in metadata.items():
+            print(f"  - {key}: {value}")
+        print()
 
     print("Resumo das pastas encontradas:")
     for folder_name, count in summary.items():
