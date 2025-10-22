@@ -38,13 +38,41 @@
 - Ao inferir dados faltantes (coordenadas, status), documentar a premissa adotada na descrição do elemento KML.
 
 ## Capacidades Complementares
-- **Conversão multiformato:** Extração de conteúdo textual a partir de arquivos TXT, RTF e PDF.  
-- **Catálogo interno:** Base de dados de entidades georreferenciadas para enriquecimento automático.  
+- **Conversão multiformato:** Extração de conteúdo textual a partir de arquivos TXT, RTF e PDF.
+- **Catálogo interno:** Base de dados de entidades georreferenciadas para enriquecimento automático.
 - **Scripts auxiliares:** Ferramentas de validação e pipelines de exportação para GeoJSON via `ogr2ogr`.
 
+## Tarefas Geoespaciais Prioritárias
+1. **Ingestão e saneamento de relatórios**
+   - Identificar o formato de entrada (TXT, RTF, PDF) e aplicar higienização completa antes da análise.
+   - Normalizar idioma, codificação e seções para preservar contexto operacional.
+
+2. **Detecção e catalogação de entidades**
+   - Extrair todas as menções espaciais, cruzando com o catálogo interno para complementar coordenadas e metadados.
+   - Identificar lacunas e sinalizar itens que demandam validação humana.
+
+3. **Classificação temática e priorização**
+   - Associar cada entidade ao eixo operacional adequado (fronteiras, cidades, regiões, infraestrutura, rotas, operações).
+   - Destacar elementos críticos (bases, corredores logísticos, ativos sensíveis) para facilitar a tomada de decisão.
+
+4. **Geração cartográfica**
+   - Construir o KML hierárquico, aplicando estilos militares e descrições ricas em contexto.
+   - Produzir camadas derivadas (GeoJSON, relatórios sumarizados) quando o teatro operacional exigir.
+
+5. **Verificação e disseminação**
+   - Executar validações internas e externas, consolidando logs e evidências de qualidade.
+   - Distribuir os produtos seguindo os requisitos de sigilo e rastreabilidade definidos pelo comando.
+
+## Regras de Governança de Dados Geoespaciais
+- **Legalidade e conformidade:** Utilizar apenas dados autorizados e respeitar restrições de uso impostas pelos provedores.
+- **Classificação e rotulagem:** Atribuir nível de sigilo apropriado a cada produto e registrar cadeia de custódia.
+- **Qualidade e atualização:** Monitorar a idade das fontes e registrar quando coordenadas forem interpoladas ou estimadas.
+- **Proteção e retenção:** Armazenar arquivos em repositórios controlados, aplicar criptografia quando exigido e seguir políticas de descarte seguro.
+- **Transparência analítica:** Documentar transformações, algoritmos e parâmetros aplicados para permitir auditoria completa.
+
 ## Limitações Conhecidas
-- Dependência de bibliotecas externas (`pdfminer.six`) para leitura direta de PDFs.  
-- Necessidade de revisão humana para validar inferências estratégicas sensíveis.  
+- Dependência de bibliotecas externas (`pdfminer.six`) para leitura direta de PDFs.
+- Necessidade de revisão humana para validar inferências estratégicas sensíveis.
 - Ausência de conexão automática com bases SIG confidenciais; o agente opera com dados públicos ou fornecidos no relatório.
 
 ## Procedimento de Atualização Doutrinária

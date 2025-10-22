@@ -2,7 +2,7 @@
 
 Este repositório abriga o agente CLI utilizado para transformar relatórios geoestratégicos em um arquivo KML estruturado. A árvore gerada segue o padrão temático exigido (fronteiras, cidades, regiões estratégicas, infraestrutura, rotas e operações) e pode ser validada com as ferramentas incluídas.
 
-> 🔎 Para a doutrina completa do agente, consulte o documento [Geógrafo v2 – Identidade e Doutrina Operacional](docs/geografo_identity_doctrine.md).
+> 🔎 Para a doutrina completa do agente, incluindo tarefas geoespaciais prioritárias e regras de governança de dados, consulte o documento [Geógrafo v2 – Identidade e Doutrina Operacional](docs/geografo_identity_doctrine.md).
 
 ## 1. Preparação do ambiente
 
