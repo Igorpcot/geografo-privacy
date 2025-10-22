@@ -2,6 +2,8 @@
 
 Este repositório abriga o agente CLI utilizado para transformar relatórios geoestratégicos em um arquivo KML estruturado. A árvore gerada segue o padrão temático exigido (fronteiras, cidades, regiões estratégicas, infraestrutura, rotas e operações) e pode ser validada com as ferramentas incluídas.
 
+> 🔎 Para a doutrina completa do agente, consulte o documento [Geógrafo v2 – Identidade e Doutrina Operacional](docs/geografo_identity_doctrine.md).
+
 ## 1. Preparação do ambiente
 
 1. Garanta que o Python 3.9+ esteja instalado.
