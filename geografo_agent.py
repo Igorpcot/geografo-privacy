@@ -9,6 +9,7 @@ from __future__ import annotations
 
 import argparse
 import json
+import logging
 import re
 import sys
 from pathlib import Path
@@ -68,7 +69,45 @@ def parse_args(argv: Iterable[str]) -> argparse.Namespace:
         action="store_true",
         help="Inclui todas as entidades do catálogo independentemente da detecção",
     )
+    parser.add_argument(
+        "--diagnostics",
+        action="store_true",
+        help="Exibe relatório de diagnóstico ao final da execução",
+    )
+    parser.add_argument(
+        "--log-file",
+        help="Grava logs detalhados da execução no caminho indicado",
+    )
+    parser.add_argument(
+        "--log-level",
+        default="INFO",
+        choices=["DEBUG", "INFO", "WARNING", "ERROR", "CRITICAL"],
+        help="Define o nível de detalhamento dos logs (padrão: INFO)",
+    )
     return parser.parse_args(list(argv))
+
+
+def configure_logging(level_name: str, log_file: str | None) -> logging.Logger:
+    level = getattr(logging, level_name.upper(), logging.INFO)
+    logger = logging.getLogger("geografo_agent")
+    logger.setLevel(level)
+    logger.handlers.clear()
+
+    formatter = logging.Formatter("%(asctime)s | %(levelname)s | %(message)s")
+
+    stream_handler = logging.StreamHandler()
+    stream_handler.setFormatter(formatter)
+    logger.addHandler(stream_handler)
+
+    if log_file:
+        log_path = Path(log_file)
+        log_path.parent.mkdir(parents=True, exist_ok=True)
+        file_handler = logging.FileHandler(log_path, encoding="utf-8")
+        file_handler.setFormatter(formatter)
+        logger.addHandler(file_handler)
+
+    logger.debug("Logger configurado com nível %s", logging.getLevelName(level))
+    return logger
 
 
 def _rtf_to_text(raw: str) -> str:
@@ -236,6 +275,69 @@ def detect_entities(text: str, knowledge: List[Dict[str, Any]], include_all: boo
                 detected.append(entity)
                 break
     return detected
+
+
+def run_diagnostics(
+    detected: List[Dict[str, Any]],
+    knowledge: List[Dict[str, Any]],
+    text: str,
+) -> Dict[str, Any]:
+    coverage: Dict[str, int] = {name: 0 for name in FOLDER_ORDER}
+    duplicates: Dict[str, int] = {}
+
+    for entity in detected:
+        name = entity.get("name")
+        style = entity.get("style")
+        folder = STYLE_MAP.get(style)
+        if folder in coverage:
+            coverage[folder] += 1
+        if isinstance(name, str):
+            key = name.strip().lower()
+            if not key:
+                continue
+            duplicates[key] = duplicates.get(key, 0) + 1
+
+    missing_categories = [folder for folder, count in coverage.items() if count == 0]
+    repeated_entities = [name for name, count in duplicates.items() if count > 1]
+
+    return {
+        "catalog_size": len(knowledge),
+        "detected_count": len(detected),
+        "text_length": len(text),
+        "coverage": coverage,
+        "missing_categories": missing_categories,
+        "repeated_entities": repeated_entities,
+    }
+
+
+def format_diagnostics(report: Dict[str, Any]) -> List[str]:
+    lines = [
+        "=== Diagnóstico Operacional ===",
+        f"Catálogo disponível: {report['catalog_size']} entidades",
+        f"Entidades reconhecidas: {report['detected_count']}",
+        f"Tamanho do relatório (caracteres): {report['text_length']}",
+        "Cobertura por pasta:",
+    ]
+    for folder in FOLDER_ORDER:
+        lines.append(f"  - {folder}: {report['coverage'].get(folder, 0)}")
+
+    missing = report.get("missing_categories", [])
+    if missing:
+        lines.append("Pastas sem entidades:")
+        for folder in missing:
+            lines.append(f"  - {folder}")
+    else:
+        lines.append("Todas as pastas possuem registros.")
+
+    duplicates = report.get("repeated_entities", [])
+    if duplicates:
+        lines.append("Entidades repetidas:")
+        for name in duplicates:
+            lines.append(f"  - {name}")
+    else:
+        lines.append("Nenhuma entidade duplicada detectada.")
+
+    return lines
 
 
 def ensure_folder(document: ET.Element, name: str) -> ET.Element:
@@ -407,36 +509,48 @@ def write_kml(root: ET.Element, output: Path) -> None:
 
 def main(argv: Iterable[str]) -> int:
     args = parse_args(argv)
+    logger = configure_logging(args.log_level, args.log_file)
     source_path = Path(args.source)
     output_path = Path(args.output)
     knowledge_path = Path(args.knowledge_base)
 
+    logger.info("Iniciando processamento do relatório: %s", source_path)
+
     if not source_path.exists():
+        logger.error("Arquivo de entrada '%s' não encontrado", source_path)
         print(f"[ERRO] Arquivo de entrada '{source_path}' não encontrado.")
         return 1
     if not knowledge_path.exists():
+        logger.error("Catálogo '%s' não encontrado", knowledge_path)
         print(f"[ERRO] Catálogo '{knowledge_path}' não encontrado.")
         return 1
 
     try:
         text = read_source(source_path)
+        logger.info("Relatório carregado com %d caracteres", len(text))
     except Exception as exc:  # pragma: no cover - erro fatal
+        logger.exception("Falha ao ler relatório")
         print(f"[ERRO] Falha ao ler relatório: {exc}")
         return 1
 
     try:
         knowledge = load_knowledge(knowledge_path)
+        logger.info("Catálogo carregado com %d entidades", len(knowledge))
     except Exception as exc:
+        logger.exception("Catálogo inválido")
         print(f"[ERRO] Catálogo inválido: {exc}")
         return 1
 
     detected = detect_entities(text, knowledge, args.include_all)
+    logger.info("Entidades detectadas: %d", len(detected))
     if not detected:
+        logger.warning("Nenhuma entidade reconhecida; encerrando sem gerar KML")
         print("[ALERTA] Nenhuma entidade reconhecida no relatório. Nada foi gerado.")
         return 2
 
     kml_root = build_kml(detected)
     write_kml(kml_root, output_path)
+    logger.info("Arquivo KML gravado em %s", output_path)
 
     print(f"Arquivo KML gerado em: {output_path}")
     print("Entidades incluídas:")
@@ -444,6 +558,12 @@ def main(argv: Iterable[str]) -> int:
         name = entity.get("name", "<sem nome>")
         style = entity.get("style", "<desconhecido>")
         print(f"  - {name} ({STYLE_MAP.get(style, 'Categoria indefinida')})")
+
+    if args.diagnostics:
+        report = run_diagnostics(detected, knowledge, text)
+        logger.debug("Relatório de diagnóstico: %s", report)
+        for line in format_diagnostics(report):
+            print(line)
 
     return 0
 

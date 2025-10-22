@@ -45,7 +45,18 @@ python validate_kml.py saida.kml
 
 O script falha com código de saída diferente de zero se o arquivo estiver corrompido ou se alguma pasta obrigatória estiver ausente.
 
-## 4. Validações externas recomendadas
+## 4. Diagnóstico e logging da execução
+
+Para auditar o fluxo completo, habilite o relatório de diagnóstico e a gravação de logs:
+
+```bash
+python geografo_agent.py samples/exemplo_relatorio.txt saida.kml \
+  --diagnostics --log-file logs/ultima_execucao.log --log-level DEBUG
+```
+
+O diagnóstico apresenta a cobertura por pasta temática, volume de entidades detectadas, tamanho do relatório processado e duplicidades. Os logs registram cada etapa do pipeline (ingestão, carga do catálogo, detecção, escrita do KML) seguindo o nível definido.
+
+## 5. Validações externas recomendadas
 
 1. **Validação sintática com `xmllint`:**
    ```bash
@@ -59,7 +70,7 @@ O script falha com código de saída diferente de zero se o arquivo estiver corr
    ogr2ogr -f GeoJSON saida.json saida.kml
    ```
 
-## 5. Checklist operacional
+## 6. Checklist operacional
 
 - [ ] Todos os elementos possuem nome e descrição coerentes.
 - [ ] As coordenadas correspondem às localizações reais indicadas.
