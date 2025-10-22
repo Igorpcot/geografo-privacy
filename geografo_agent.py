@@ -52,7 +52,7 @@ def parse_args(argv: Iterable[str]) -> argparse.Namespace:
     )
     parser.add_argument(
         "source",
-        help="Caminho para o relatório de entrada (TXT ou PDF)",
+        help="Caminho para o relatório de entrada (TXT, RTF ou PDF)",
     )
     parser.add_argument(
         "output",
@@ -72,32 +72,132 @@ def parse_args(argv: Iterable[str]) -> argparse.Namespace:
 
 
 def _rtf_to_text(raw: str) -> str:
-    """Converte um conteúdo RTF simples em texto plano."""
+    """Converte conteúdo RTF em texto plano respeitando os comandos básicos."""
 
-    def unicode_replacer(match: re.Match[str]) -> str:
-        value = int(match.group(1))
-        if value < 0:
-            value += 0x10000
-        return chr(value)
+    i = 0
+    length = len(raw)
+    stack: List[tuple[int, bool]] = []
+    result: List[str] = []
+    ignorable = False
+    ucskip = 1
+    curskip = 0
 
-    text = raw.replace("\r", "")
-    text = re.sub(r"\\u(-?\d+)[^\\]?", unicode_replacer, text)
-    text = re.sub(
-        r"\\'[0-9a-fA-F]{2}",
-        lambda m: bytes.fromhex(m.group(0)[2:]).decode("latin1"),
-        text,
-    )
-    replacements = {
-        "\\par": "\n",
-        "\\line": "\n",
-        "\\tab": "\t",
+    ignorable_destinations = {
+        "fonttbl",
+        "colortbl",
+        "datastore",
+        "stylesheet",
+        "info",
+        "pict",
+        "header",
+        "footer",
+        "object",
+        "filetbl",
+        "pntext",
     }
-    for key, value in replacements.items():
-        text = text.replace(key, value)
 
-    text = re.sub(r"\\[a-zA-Z]+-?\d* ?", "", text)
-    text = text.replace("{", "").replace("}", "")
-    text = re.sub(r"\n{2,}", "\n", text)
+    while i < length:
+        char = raw[i]
+
+        if char == "\\":
+            i += 1
+            if i >= length:
+                break
+            command = raw[i]
+
+            if command in "\\{}":
+                if not ignorable:
+                    result.append(command)
+                i += 1
+                continue
+
+            if command == "*":
+                ignorable = True
+                i += 1
+                continue
+
+            if command == "'":
+                hex_value = raw[i + 1 : i + 3]
+                if not ignorable and len(hex_value) == 2:
+                    try:
+                        result.append(bytes.fromhex(hex_value).decode("latin1"))
+                    except ValueError:
+                        pass
+                i += 3
+                if curskip > 0:
+                    curskip -= 1
+                continue
+
+            match = re.match(r"([a-zA-Z]+)(-?\d+)? ?", raw[i:])
+            if not match:
+                i += 1
+                continue
+            word = match.group(1)
+            arg = match.group(2)
+            i += match.end()
+
+            if word in {"par", "line"}:
+                if not ignorable:
+                    result.append("\n")
+                curskip = 0
+            elif word == "tab":
+                if not ignorable:
+                    result.append("\t")
+                curskip = 0
+            elif word == "uc" and arg is not None:
+                try:
+                    ucskip = max(int(arg), 0)
+                except ValueError:
+                    pass
+                curskip = 0
+            elif word == "u" and arg is not None:
+                try:
+                    code = int(arg)
+                except ValueError:
+                    code = None
+                if code is not None:
+                    if code < 0:
+                        code += 0x10000
+                    if not ignorable:
+                        result.append(chr(code))
+                curskip = ucskip
+            elif word in ignorable_destinations:
+                ignorable = True
+                curskip = 0
+            else:
+                curskip = 0
+
+            if arg is None and raw[i - 1] != " ":
+                continue
+
+        elif char == "{":
+            stack.append((ucskip, ignorable))
+            ignorable = False
+            i += 1
+            continue
+        elif char == "}":
+            if stack:
+                ucskip, ignorable = stack.pop()
+            i += 1
+            continue
+        else:
+            if curskip > 0:
+                curskip -= 1
+                i += 1
+                continue
+            if not ignorable:
+                result.append(char)
+            i += 1
+            continue
+
+        if curskip > 0:
+            skip = min(curskip, length - i)
+            i += skip
+            curskip -= skip
+
+    text = "".join(result)
+    text = text.replace("\r", "")
+    text = re.sub(r"\n{3,}", "\n\n", text)
     return text.strip()
 
 
