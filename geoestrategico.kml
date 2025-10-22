@@ -1,0 +1,282 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ns0:kml xmlns:ns0="http://www.opengis.net/kml/2.2" xmlns="http://www.opengis.net/kml/2.2">
+  <ns0:Document>
+    <ns0:name>Geógrafo v2 - Produto Gerado</ns0:name>
+    <ns0:open>1</ns0:open>
+    <ns0:Style id="country-border">
+      <ns0:LineStyle>
+        <ns0:color>ff0055ff</ns0:color>
+        <ns0:width>3</ns0:width>
+      </ns0:LineStyle>
+      <ns0:PolyStyle>
+        <ns0:color>330055ff</ns0:color>
+      </ns0:PolyStyle>
+    </ns0:Style>
+    <ns0:Style id="city-capital">
+      <ns0:IconStyle>
+        <ns0:color>ff0000ff</ns0:color>
+        <ns0:scale>1.2</ns0:scale>
+        <ns0:Icon>
+          <ns0:href>http://maps.google.com/mapfiles/kml/paddle/red-stars.png</ns0:href>
+        </ns0:Icon>
+      </ns0:IconStyle>
+    </ns0:Style>
+    <ns0:Style id="city-major">
+      <ns0:IconStyle>
+        <ns0:color>ff00aaff</ns0:color>
+        <ns0:scale>1.1</ns0:scale>
+        <ns0:Icon>
+          <ns0:href>http://maps.google.com/mapfiles/kml/paddle/blu-circle.png</ns0:href>
+        </ns0:Icon>
+      </ns0:IconStyle>
+    </ns0:Style>
+    <ns0:Style id="region-zone">
+      <ns0:LineStyle>
+        <ns0:color>ff00ffaa</ns0:color>
+        <ns0:width>2</ns0:width>
+      </ns0:LineStyle>
+      <ns0:PolyStyle>
+        <ns0:color>3300ffaa</ns0:color>
+      </ns0:PolyStyle>
+    </ns0:Style>
+    <ns0:Style id="infrastructure">
+      <ns0:IconStyle>
+        <ns0:color>ff00aa00</ns0:color>
+        <ns0:scale>1.0</ns0:scale>
+        <ns0:Icon>
+          <ns0:href>http://maps.google.com/mapfiles/kml/paddle/grn-circle.png</ns0:href>
+        </ns0:Icon>
+      </ns0:IconStyle>
+    </ns0:Style>
+    <ns0:Style id="route-line">
+      <ns0:LineStyle>
+        <ns0:color>ffffaa00</ns0:color>
+        <ns0:width>4</ns0:width>
+      </ns0:LineStyle>
+    </ns0:Style>
+    <ns0:Style id="event-operation">
+      <ns0:IconStyle>
+        <ns0:color>ff00ffff</ns0:color>
+        <ns0:scale>1.1</ns0:scale>
+        <ns0:Icon>
+          <ns0:href>http://maps.google.com/mapfiles/kml/paddle/purple-blank.png</ns0:href>
+        </ns0:Icon>
+      </ns0:IconStyle>
+    </ns0:Style>
+    <ns0:Folder>
+      <ns0:name>Países e Fronteiras</ns0:name>
+      <ns0:Placemark>
+        <ns0:name>Fronteira Brasil - Colômbia</ns0:name>
+        <ns0:styleUrl>#country-border</ns0:styleUrl>
+        <ns0:description>Segmento amazônico da fronteira terrestre entre o Brasil e a Colômbia.</ns0:description>
+        <ns0:LineString>
+          <ns0:tessellate>1</ns0:tessellate>
+          <ns0:coordinates>-70.027000,4.215000,0
+-69.646000,3.839000,0
+-69.348000,3.366000,0
+-68.815000,2.712000,0
+-67.871000,2.082000,0
+-67.361000,1.823000,0
+-66.876000,1.176000,0
+-66.325000,0.902000,0</ns0:coordinates>
+        </ns0:LineString>
+      </ns0:Placemark>
+      <ns0:Placemark>
+        <ns0:name>Fronteira Brasil - Bolívia (Corredor Central)</ns0:name>
+        <ns0:styleUrl>#country-border</ns0:styleUrl>
+        <ns0:description>Trecho estratégico que conecta Corumbá (MS) a Guajará-Mirim (RO) pela fronteira boliviana.</ns0:description>
+        <ns0:LineString>
+          <ns0:tessellate>1</ns0:tessellate>
+          <ns0:coordinates>-57.650000,-19.000000,0
+-58.100000,-18.100000,0
+-59.250000,-17.400000,0
+-60.120000,-16.400000,0
+-62.100000,-11.020000,0</ns0:coordinates>
+        </ns0:LineString>
+      </ns0:Placemark>
+    </ns0:Folder>
+    <ns0:Folder>
+      <ns0:name>Capitais e Cidades</ns0:name>
+      <ns0:Placemark>
+        <ns0:name>Brasília</ns0:name>
+        <ns0:styleUrl>#city-capital</ns0:styleUrl>
+        <ns0:description>Capital federal e centro de comando político do Brasil.</ns0:description>
+        <ns0:Point>
+          <ns0:coordinates>-47.882500,-15.794200,0</ns0:coordinates>
+        </ns0:Point>
+      </ns0:Placemark>
+      <ns0:Placemark>
+        <ns0:name>Manaus</ns0:name>
+        <ns0:styleUrl>#city-major</ns0:styleUrl>
+        <ns0:description>Capital amazônica, polo logístico fluvial e aéreo para operações na Amazônia Ocidental.</ns0:description>
+        <ns0:Point>
+          <ns0:coordinates>-60.021700,-3.119000,0</ns0:coordinates>
+        </ns0:Point>
+      </ns0:Placemark>
+      <ns0:Placemark>
+        <ns0:name>Boa Vista</ns0:name>
+        <ns0:styleUrl>#city-major</ns0:styleUrl>
+        <ns0:description>Capital de Roraima, próxima às fronteiras com a Venezuela e Guiana.</ns0:description>
+        <ns0:Point>
+          <ns0:coordinates>-60.675300,2.823500,0</ns0:coordinates>
+        </ns0:Point>
+      </ns0:Placemark>
+      <ns0:Placemark>
+        <ns0:name>Rio de Janeiro</ns0:name>
+        <ns0:styleUrl>#city-major</ns0:styleUrl>
+        <ns0:description>Centro urbano costeiro com capacidade industrial e logística naval.</ns0:description>
+        <ns0:Point>
+          <ns0:coordinates>-43.209600,-22.903500,0</ns0:coordinates>
+        </ns0:Point>
+      </ns0:Placemark>
+      <ns0:Placemark>
+        <ns0:name>Tabatinga</ns0:name>
+        <ns0:styleUrl>#city-major</ns0:styleUrl>
+        <ns0:description>Município trinacional no extremo oeste do Amazonas, porta de entrada para operações conjuntas com Colômbia e Peru.</ns0:description>
+        <ns0:Point>
+          <ns0:coordinates>-69.938600,-4.231900,0</ns0:coordinates>
+        </ns0:Point>
+      </ns0:Placemark>
+    </ns0:Folder>
+    <ns0:Folder>
+      <ns0:name>Regiões e Zonas Estratégicas</ns0:name>
+      <ns0:Placemark>
+        <ns0:name>Calha Norte</ns0:name>
+        <ns0:styleUrl>#region-zone</ns0:styleUrl>
+        <ns0:description>Zona estratégica de vigilância na fronteira norte, abrangendo bases do Exército e comunidades ribeirinhas.</ns0:description>
+        <ns0:Polygon>
+          <ns0:outerBoundaryIs>
+            <ns0:LinearRing>
+              <ns0:coordinates>-54.000000,3.000000,0
+-58.000000,3.800000,0
+-60.500000,2.900000,0
+-61.800000,2.500000,0
+-63.000000,3.200000,0
+-60.000000,5.000000,0
+-56.000000,5.300000,0
+-54.000000,3.000000,0</ns0:coordinates>
+            </ns0:LinearRing>
+          </ns0:outerBoundaryIs>
+        </ns0:Polygon>
+      </ns0:Placemark>
+      <ns0:Placemark>
+        <ns0:name>Sistema Guianense de Vigilância</ns0:name>
+        <ns0:styleUrl>#region-zone</ns0:styleUrl>
+        <ns0:description>Setor de monitoramento no escudo das Guianas, com foco em atividades ilícitas transfronteiriças.</ns0:description>
+        <ns0:Polygon>
+          <ns0:outerBoundaryIs>
+            <ns0:LinearRing>
+              <ns0:coordinates>-60.900000,4.300000,0
+-59.500000,3.900000,0
+-58.000000,4.200000,0
+-58.500000,5.300000,0
+-60.000000,5.700000,0
+-60.900000,4.300000,0</ns0:coordinates>
+            </ns0:LinearRing>
+          </ns0:outerBoundaryIs>
+        </ns0:Polygon>
+      </ns0:Placemark>
+    </ns0:Folder>
+    <ns0:Folder>
+      <ns0:name>Infraestrutura e Recursos</ns0:name>
+      <ns0:Placemark>
+        <ns0:name>Base Aérea de Anápolis (ALA 2)</ns0:name>
+        <ns0:styleUrl>#infrastructure</ns0:styleUrl>
+        <ns0:description>Base aérea estratégica para defesa do espaço aéreo central do Brasil.</ns0:description>
+        <ns0:Point>
+          <ns0:coordinates>-48.960400,-16.228700,0</ns0:coordinates>
+        </ns0:Point>
+      </ns0:Placemark>
+      <ns0:Placemark>
+        <ns0:name>Porto de Santos</ns0:name>
+        <ns0:styleUrl>#infrastructure</ns0:styleUrl>
+        <ns0:description>Principal porto marítimo brasileiro, vital para a cadeia logística nacional.</ns0:description>
+        <ns0:Point>
+          <ns0:coordinates>-46.305800,-23.961800,0</ns0:coordinates>
+        </ns0:Point>
+      </ns0:Placemark>
+      <ns0:Placemark>
+        <ns0:name>Usina Hidrelétrica de Itaipu</ns0:name>
+        <ns0:styleUrl>#infrastructure</ns0:styleUrl>
+        <ns0:description>Maior usina hidrelétrica binacional Brasil-Paraguai, essencial para segurança energética.</ns0:description>
+        <ns0:Point>
+          <ns0:coordinates>-54.588300,-25.408000,0</ns0:coordinates>
+        </ns0:Point>
+      </ns0:Placemark>
+      <ns0:Placemark>
+        <ns0:name>Centro de Lançamento de Alcântara</ns0:name>
+        <ns0:styleUrl>#infrastructure</ns0:styleUrl>
+        <ns0:description>Base aeroespacial próxima à linha do Equador, com importância para operações espaciais.</ns0:description>
+        <ns0:Point>
+          <ns0:coordinates>-44.372300,-2.370700,0</ns0:coordinates>
+        </ns0:Point>
+      </ns0:Placemark>
+    </ns0:Folder>
+    <ns0:Folder>
+      <ns0:name>Linhas e Rotas Estratégicas</ns0:name>
+      <ns0:Placemark>
+        <ns0:name>BR-163 (Corredor Norte)</ns0:name>
+        <ns0:styleUrl>#route-line</ns0:styleUrl>
+        <ns0:description>Via terrestre fundamental para escoamento de grãos do Centro-Oeste aos portos do Pará.</ns0:description>
+        <ns0:LineString>
+          <ns0:tessellate>1</ns0:tessellate>
+          <ns0:coordinates>-55.721000,-12.740000,0
+-55.515000,-10.183000,0
+-55.508000,-6.020000,0
+-55.236000,-3.140000,0
+-54.734000,-1.410000,0</ns0:coordinates>
+        </ns0:LineString>
+      </ns0:Placemark>
+      <ns0:Placemark>
+        <ns0:name>Hidrovias do Rio Amazonas</ns0:name>
+        <ns0:styleUrl>#route-line</ns0:styleUrl>
+        <ns0:description>Principal rota fluvial de transporte e abastecimento da Amazônia.</ns0:description>
+        <ns0:LineString>
+          <ns0:tessellate>1</ns0:tessellate>
+          <ns0:coordinates>-58.150000,-3.140000,0
+-56.500000,-2.500000,0
+-54.700000,-2.100000,0
+-52.200000,-1.500000,0
+-50.000000,-1.200000,0</ns0:coordinates>
+        </ns0:LineString>
+      </ns0:Placemark>
+    </ns0:Folder>
+    <ns0:Folder>
+      <ns0:name>Eventos e Operações</ns0:name>
+      <ns0:Placemark>
+        <ns0:name>Operação Ágata 2023</ns0:name>
+        <ns0:styleUrl>#event-operation</ns0:styleUrl>
+        <ns0:description>Período: Agosto 2023
+Contexto: Operação interagências para combate a ilícitos transfronteiriços na faixa de fronteira amazônica.
+Ativos: 3ª Brigada de Infantaria de Selva, Polícia Federal, IBAMA</ns0:description>
+        <ns0:Point>
+          <ns0:coordinates>-63.903000,-4.091000,0</ns0:coordinates>
+        </ns0:Point>
+      </ns0:Placemark>
+      <ns0:Placemark>
+        <ns0:name>Operação Controle Norte 2024</ns0:name>
+        <ns0:styleUrl>#event-operation</ns0:styleUrl>
+        <ns0:description>Período: Março 2024
+Contexto: Ação coordenada do Comando Militar do Norte para reforçar presença em pistas clandestinas e aldeias próximas à fronteira da Guiana.
+Ativos: 8º Batalhão de Infantaria de Selva, FAB (C-105 Amazonas), PRF</ns0:description>
+        <ns0:Point>
+          <ns0:coordinates>-59.968000,3.535000,0</ns0:coordinates>
+        </ns0:Point>
+      </ns0:Placemark>
+    </ns0:Folder>
+    <ns0:ExtendedData>
+      <ns0:Data name="agent_version">
+        <ns0:value>2.1.0</ns0:value>
+      </ns0:Data>
+      <ns0:Data name="fonte_relatorio">
+        <ns0:value>exemplo_relatorio.txt</ns0:value>
+      </ns0:Data>
+      <ns0:Data name="catalogo">
+        <ns0:value>entities.json</ns0:value>
+      </ns0:Data>
+      <ns0:Data name="entidades_catalogo">
+        <ns0:value>17</ns0:value>
+      </ns0:Data>
+    </ns0:ExtendedData>
+  </ns0:Document>
+</ns0:kml>
